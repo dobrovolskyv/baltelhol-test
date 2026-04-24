@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
@@ -16,8 +17,10 @@ Route::get('/user', function (Request $request) {
 //     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 //     Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 //     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-    
+
 // });
 
-Route::apiResource('products', ProductController::class);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::apiResource('/products', ProductController::class)->middleware('auth:sanctum');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
