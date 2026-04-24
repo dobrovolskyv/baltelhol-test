@@ -13,12 +13,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return Product::all();
+        return ProductResource::collection(Product::with('category')->paginate(10))->response();
     }
 
-    public function show(Product $product)
+    public function show(Product $id)
     {
-        return ProductResource::collection($product->load('category'))->response()->setStatusCode(200);
+        return ProductResource::make($id->load('category'))->response();
+
     }
 
     public function store(StoreRequest $request)
@@ -27,16 +28,16 @@ class ProductController extends Controller
         $product = Product::create($data);
         return ProductResource::make($product)->response()->setStatusCode(201);
     }
-    public function update(StoreRequest $request, Product $product)
+    public function update(StoreRequest $request, Product $id)
     {
         $data = $request->validated();
-        $product->update($data);
-        return ProductResource::make($product)->response()->setStatusCode(200);
+        $id->update($data);
+        return ProductResource::make($id)->response()->setStatusCode(200);
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $id)
     {
-        $product->delete();
+        $id->delete();
         return response()->json([
             'message' => 'Product deleted successfully'
         ], Response::HTTP_OK);
