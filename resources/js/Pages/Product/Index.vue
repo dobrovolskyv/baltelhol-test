@@ -1,6 +1,11 @@
 <template>
     <div>
         <h1>PRODUCTS PAGE</h1>
+        <div v-if="token" >
+            <h2>token</h2>
+        </div>
+
+        <h2 class="text-3xl text-green-700 border border-teal-700 py-2 px-4 inline-block"> FILTER</h2>
         <div class=" p-4">
             <div class="p-2 flex items-center justify-between font-bold">
                 <p>Name</p>
@@ -8,8 +13,8 @@
             </div>
             <div v-for="product in products.data" :key="product.id"
                  class="font-bold p-2 flex items-center justify-between text-3xl uppercase text-cyan-900">
-                    <p>{{product.name}}</p>
-<!--                <Link :href="route('product.show', product.id)" class="hover:text-cyan-600">{{ product.name }}</Link>-->
+<!--                    <p>{{product.name}}</p>-->
+                <Link :href="route('product.show', product.id)" class="hover:text-cyan-600">{{ product.name }}</Link>
 
             </div>
         </div>
@@ -51,7 +56,11 @@
 
 <script setup>
 import HomeLayout from '@/Layouts/HomeLayout.vue';
-import { Link } from '@inertiajs/vue3'
+import {Link, router} from '@inertiajs/vue3'
+import {onMounted,ref} from "vue";
+import axios from "axios";
+
+
 
 defineOptions({
     layout: HomeLayout
@@ -59,6 +68,16 @@ defineOptions({
 const props = defineProps({
     products: { type: Object, required: true }
 })
+
+const token = ref(localStorage.getItem('admin_token'));
+
+onMounted(() => {
+    if (!token.value) {
+        router.visit('/login');
+    } else {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+    }
+});
 </script>
 
 <style lang="scss" scoped></style>

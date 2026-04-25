@@ -1,10 +1,10 @@
 <template>
     <section class="bg-white w-full">
         <header class="p-4 flex justify-between bg-teal-200">
-            <h1>HOME PAGE</h1>
+            <h1>LOGO</h1>
             <div class="flex items-center gap-3 ">
-                <Link :href="route('login')" class="hover:hover:text-cyan-600">Админ панель</Link>
-                <Link :href="route('login')" class="hover:hover:text-cyan-600">Вход</Link>
+                <Link :href="route('home')" class="hover:hover:text-cyan-600">Главный экран</Link>
+                <Link class="hover:hover:text-cyan-600">Выход</Link>
             </div>
         </header>
     </section>
@@ -23,7 +23,7 @@
 import { Link } from "@inertiajs/vue3";
 
 export default {
-    name: "HomeLayout",
+    name: "AdminLayout",
     components: {
         Link
     }

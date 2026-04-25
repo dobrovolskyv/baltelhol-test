@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
@@ -13,9 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = ProductResource::collection(Product::with('category')->paginate(7));
+        $products = ProductResource::collection(Product::with('category')->paginate(10));
         return inertia('Product/Index', [
-            'products' => $product
+            'products' => $products
         ]);
     }
 
@@ -26,7 +27,7 @@ class ProductController extends Controller
     public function show(Product $id)
     {
 
-        $id= ProductResource::make($id->load('category'))->response()->setStatusCode(200)->response();
+        $id= ProductResource::make($id->load('category'))->resolve();
         return inertia('Product/Show', [
             'product' => $id
         ]);

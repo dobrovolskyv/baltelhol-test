@@ -39,6 +39,11 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully.'], 200);
+        return inertia('Product/Index');
+    }
+
+    public function showLoginForm()
+    {
+        return inertia('Auth/Login');
     }
 }

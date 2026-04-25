@@ -11,19 +11,19 @@ use Illuminate\Support\Facades\Route;
 //})->middleware('auth:sanctum');
 
 
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 
 
 Route::get('/products', [ProductController::class, 'index'])->name('api.products.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('api.products.show');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-    
-//    Route::apiResource('products', ProductController::class)
-//    ->except(['index', 'show']);
+//    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+//    Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
+//    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    Route::apiResource('products', ProductController::class)
+    ->except(['index', 'show']);
 });
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
