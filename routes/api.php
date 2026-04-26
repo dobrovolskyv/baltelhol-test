@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Route;
 //})->middleware('auth:sanctum');
 
 
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+
 
 
 Route::get('/products', [ProductController::class, 'index'])->name('api.products.index');
@@ -27,3 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
+
+

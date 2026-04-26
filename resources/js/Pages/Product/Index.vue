@@ -59,7 +59,7 @@ import HomeLayout from '@/Layouts/HomeLayout.vue';
 import {Link, router} from '@inertiajs/vue3'
 import {onMounted,ref} from "vue";
 import axios from "axios";
-
+import {useAuth} from "@/feature/useAuth.js";
 
 
 defineOptions({
@@ -68,16 +68,20 @@ defineOptions({
 const props = defineProps({
     products: { type: Object, required: true }
 })
+const { token, checkAndRedirect } = useAuth();
 
-const token = ref(localStorage.getItem('admin_token'));
-
-onMounted(() => {
-    if (!token.value) {
-        router.visit('/login');
-    } else {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
-    }
-});
+onMounted(()=>{
+    checkAndRedirect();
+})
+// const token = ref(localStorage.getItem('admin_token'));
+//
+// onMounted(() => {
+//     if (!token.value) {
+//         router.visit('/login');
+//     } else {
+//         axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+//     }
+// });
 </script>
 
 <style lang="scss" scoped></style>

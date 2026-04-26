@@ -2,8 +2,8 @@
     <div>
         <h2>Admin Login</h2>
         <form @submit.prevent="submit">
-            <input type="email" v-model="form.email" placeholder="Email" />
-            <input type="password" v-model="form.password" placeholder="Password" />
+            <input type="email" v-model="form.email" placeholder="Email"/>
+            <input type="password" v-model="form.password" placeholder="Password"/>
             <button type="submit">Login</button>
         </form>
         <div v-if="error">{{ error }}</div>
@@ -11,11 +11,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import {ref} from 'vue';
+import {router} from '@inertiajs/vue3';
 import axios from 'axios';
 
-const form = ref({ email: '', password: '' });
+const form = ref({email: '', password: ''});
 const error = ref('');
 
 const submit = async () => {
@@ -25,7 +25,9 @@ const submit = async () => {
         localStorage.setItem('admin_token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         // Перенаправляем в админ‑панель
-        router.get('admin.products.index');
+        // router.get('admin.products.index');
+        // router.visit('/')
+        router.get(route('admin.products.index'));
     } catch (err) {
         error.value = 'Invalid credentials';
     }

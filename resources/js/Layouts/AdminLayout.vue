@@ -4,7 +4,7 @@
             <h1>LOGO</h1>
             <div class="flex items-center gap-3 ">
                 <Link :href="route('home')" class="hover:hover:text-cyan-600">Главный экран</Link>
-                <Link class="hover:hover:text-cyan-600">Выход</Link>
+                <button @click="logout" class="hover:hover:text-cyan-600">Выход</button>
             </div>
         </header>
     </section>
@@ -19,15 +19,37 @@
     </section>
 </template>
 
-<script>
-import { Link } from "@inertiajs/vue3";
+<script setup>
+import {Link, router} from "@inertiajs/vue3";
+import axios from "axios";
 
-export default {
-    name: "AdminLayout",
-    components: {
-        Link
+
+
+
+const logout = async () => {
+    try {
+        await axios.post('/logout');
+        localStorage.removeItem('admin_token');
+        delete axios.defaults.headers.common['Authorization'];
+        router.visit('/'); // или '/login'
+    } catch (e) {
+        console.error(e);
     }
-}
+};
+
+// const form = useForm({});
+//
+// const logout = () => {
+//     form.post('/logout', {
+//         onSuccess: () => {
+//             localStorage.removeItem('admin_token');
+//             delete axios.defaults.headers.common['Authorization'];
+//         },
+//         onError: (errors) => {
+//             console.error('Ошибка при выходе:', errors);
+//         }
+//     });
+// };
 
 </script>
 
