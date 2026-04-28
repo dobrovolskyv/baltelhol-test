@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
@@ -37,7 +38,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductResource $request)
+    public function store(ProductRequest $request)
     {
         Product::create($request->validated());
         return redirect()->route('admin.products.index');
@@ -65,7 +66,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductResource $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
         $data= $request->validated();
         $product->update($data);

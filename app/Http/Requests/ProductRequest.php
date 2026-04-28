@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Api\Category;
+namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -18,7 +19,7 @@ class UpdateRequest extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'price' => 'required|numeric:min:0',
+            'price' => 'required|numeric|min:0.01',
             'category_id' => 'required|exists:categories,id',
         ];
     }
