@@ -1,5 +1,5 @@
 # Используем официальный образ PHP с FPM
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # Устанавливаем системные зависимости и PostgreSQL драйвер
 RUN apt-get update && apt-get install -y \
