@@ -12,7 +12,7 @@
         <div v-if="product" class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
                 <div>
-                    <h3 class="text-2xl leading-6 font-extrabold text-gray-900">
+                    <h3 class="text-2xl  leading-6 font-extrabold text-gray-900">
                         {{ product.name }}
                     </h3>
                     <p class="mt-2 max-w-2xl text-sm text-gray-500">
@@ -31,7 +31,7 @@
                         <dt class="text-sm font-medium text-gray-500">
                             Название
                         </dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <dd class="mt-1 text-md text-gray-900 sm:mt-0 sm:col-span-2 font-bold uppercase">
                             {{ product.name }}
                         </dd>
                     </div>
