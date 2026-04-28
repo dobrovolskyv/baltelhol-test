@@ -1,58 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BalTelHol - Laravel Web Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Описание
 
-## About Laravel
+Этот проект представляет собой веб-приложение, разработанное с использованием стека Laravel + Vue.js. Проект был настроен для максимально простого локального запуска через Docker. 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+База данных инициализируется **сразу с готовыми (сидированными) данными**, чтобы вы могли сразу запустить проект и посмотреть, как он выглядит и работает.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Требования
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Для запуска проекта на вашем компьютере должны быть установлены:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- Git (для клонирования репозитория)
 
-## Learning Laravel
+Больше ничего устанавливать не нужно (ни PHP, ни Composer, ни Node.js), так как всё уже настроено внутри Docker-контейнеров.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Инструкция по запуску
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Склонируйте репозиторий:**
+   ```bash
+   git clone <url-репозитория>
+   cd <имя-папки-проекта>
+   ```
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+2. **Запустите Docker Compose:**
+   В корне проекта выполните команду:
+   ```bash
+   docker-compose up -d --build
+   ```
 
-## Agentic Development
+   **Что произойдет при первом запуске:**
+   Контейнеры начнут собираться и запускаться. При старте контейнера `app` автоматически произойдет следующее:
+   - Создастся файл `.env` на основе `.env.example`.
+   - Установятся все PHP-зависимости через Composer.
+   - Установятся NPM-зависимости и соберутся ассеты Vite (`public/build`).
+   - Сгенерируется ключ приложения Laravel (`APP_KEY`).
+   - Приложение дождется запуска базы данных PostgreSQL.
+   - Автоматически запустятся миграции и сидеры (наполнение базы данных тестовыми данными).
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+   *Примечание: Первый запуск может занять несколько минут из-за скачивания зависимостей Composer и NPM внутри контейнера. Вы можете следить за процессом инициализации с помощью команды:*
+   ```bash
+   docker-compose logs -f app
+   ```
 
-```bash
-composer require laravel/boost --dev
+3. **Откройте приложение в браузере:**
+   После того как инициализация завершится, проект будет доступен по адресу:
+   [http://localhost:8080](http://localhost:8080)
 
-php artisan boost:install
-```
+## Управление контейнерами
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+- **Остановить проект:**
+  ```bash
+  docker-compose down
+  ```
+- **Перезапустить проект (если внесли изменения в код):**
+  Изменения кода (PHP/Vue) применяются моментально благодаря volume-монтированию. Для сборки новых NPM-ассетов вы можете войти в контейнер:
+  ```bash
+  docker-compose exec app npm run build
+  ```
+  Или для запуска dev-сервера (HMR):
+  ```bash
+  docker-compose exec app npm run dev
+  ```
+- **Сбросить базу данных и накатить заново сиды:**
+  ```bash
+  docker-compose exec app php artisan migrate:fresh --seed
+  ```
 
-## Contributing
+## Доступы (Тестовые данные)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Например:
+- **Email:** user@mail.com
+- **Пароль:** 123
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Приятного использования!
