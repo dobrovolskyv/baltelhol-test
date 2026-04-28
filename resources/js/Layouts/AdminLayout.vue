@@ -1,7 +1,7 @@
 <template>
     <section class="bg-white w-full">
         <header class="p-4 flex justify-between bg-teal-200">
-            <h1>LOGO</h1>
+            <h1>ADMIN PAGE</h1>
             <div class="flex items-center gap-3 ">
                 <Link :href="route('home')" class="hover:hover:text-cyan-600">Главный экран</Link>
                 <button @click="logout" class="hover:hover:text-cyan-600">Выход</button>
@@ -31,25 +31,12 @@ const logout = async () => {
         await axios.post('/logout');
         localStorage.removeItem('admin_token');
         delete axios.defaults.headers.common['Authorization'];
-        router.visit('/'); // или '/login'
+        router.visit(route('home')); //
     } catch (e) {
         console.error(e);
     }
 };
 
-// const form = useForm({});
-//
-// const logout = () => {
-//     form.post('/logout', {
-//         onSuccess: () => {
-//             localStorage.removeItem('admin_token');
-//             delete axios.defaults.headers.common['Authorization'];
-//         },
-//         onError: (errors) => {
-//             console.error('Ошибка при выходе:', errors);
-//         }
-//     });
-// };
 
 </script>
 

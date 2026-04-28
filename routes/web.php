@@ -10,6 +10,8 @@ Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
 
 require base_path('routes/admin.php');
+

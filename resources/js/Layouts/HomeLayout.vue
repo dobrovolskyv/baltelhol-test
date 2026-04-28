@@ -6,11 +6,12 @@
                 <Link :href="route('admin.products.index')" class="hover:hover:text-cyan-600">Админ панель</Link>
 
                 <div v-if="token">
-                    <Link :href="route('login')" class="hover:hover:text-cyan-600">Выход</Link>
+                    <button @click="logout" class="hover:hover:text-cyan-600">Выход</button>
                 </div>
-<!--                <div v-else>-->
-<!--                    <Link :href="route('login')" class="hover:hover:text-cyan-600">Вход</Link>-->
-<!--                </div>-->
+
+                <!--                <div v-else>-->
+                <!--                    <Link :href="route('login')" class="hover:hover:text-cyan-600">Вход</Link>-->
+                <!--                </div>-->
 
             </div>
         </header>
@@ -27,16 +28,29 @@
 </template>
 
 <script setup>
-import {Link} from "@inertiajs/vue3";
+import {Link, router} from "@inertiajs/vue3";
 import {useAuth} from "@/feature/useAuth.js";
 import {onMounted} from "vue";
+import axios from "axios";
 
 
-const {token, checkAndRedirect} = useAuth();
+const {token,clearToken, checkAndRedirect} = useAuth();
 
-onMounted(()=>{
+onMounted(() => {
     checkAndRedirect()
 })
+
+
+const logout = async () => {
+    try {
+        await axios.post('/logout');
+        localStorage.removeItem('admin_token');
+        delete axios.defaults.headers.common['Authorization']
+        router.visit(route('home'));
+    } catch (e) {
+        console.error(e)
+    }
+}
 
 
 </script>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\ProductFilter;
+use App\Http\Requests\Api\Product\IndexRequest;
 use App\Http\Requests\Api\Product\StoreRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -11,9 +13,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(IndexRequest $request)
     {
-        return ProductResource::collection(Product::with('category')->paginate(10))->response();
+        $data = $request->validated();
+
+        $query = Product::query();
+
+        if (isset($data['category_name'])) {
+            $query->whereRelation('category', 'name', 'ilike', $data['category_name']);
+        }
+
+        $products = $query->with('category')->paginate(10);
+
+        return ProductResource::collection($products)->response();
+//        $products = (new ProductFilter())->apply($products, $data);
+//        $products = $products->get();
+//        return ProductResource::collection(Product::with('category')->paginate(10))->response();
     }
 
     public function show(Product $id)
@@ -28,6 +43,7 @@ class ProductController extends Controller
         $product = Product::create($data);
         return ProductResource::make($product)->response()->setStatusCode(201);
     }
+
     public function update(StoreRequest $request, Product $id)
     {
         $data = $request->validated();

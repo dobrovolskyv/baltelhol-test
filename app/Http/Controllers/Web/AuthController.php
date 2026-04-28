@@ -15,4 +15,9 @@ class AuthController extends Controller
 
         return redirect()->route('home');
     }
+
+    public function showLoginForm()
+    {
+        return inertia('Auth/Login');
+    }
 }

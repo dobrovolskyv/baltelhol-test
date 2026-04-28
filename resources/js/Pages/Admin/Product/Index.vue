@@ -15,6 +15,7 @@
             <div v-for="product in products.data" :key="product.id"
                 class="font-bold py-2 flex items-center justify-between text-3xl uppercase text-cyan-900">
                 {{ product.name }}
+<!--                <Link :href="route('product.show', product.id)" class="hover:text-cyan-600">{{ product.name }}</Link>-->
                 <div class="flex items-center gap-2">
                     <Link :href="route('admin.products.edit', product.id)">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -24,7 +25,7 @@
                         </svg>
                     </Link>
 
-                    <button @click.prevent="destroyProduct(product.id)">
+                    <button @click.prevent="deleteProduct(product.id)">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-4 text-red-600">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -33,7 +34,7 @@
                     </button>
                 </div>
 
-                <!-- <Link :href="route('product.show', product.id)" class="hover:text-cyan-600">{{ product.name }}</Link> -->
+<!--                 <Link :href="route('product.show', product.id)" class="hover:text-cyan-600">{{ product.name }}</Link>-->
 
             </div>
         </div>
@@ -63,8 +64,8 @@ const props = defineProps({
     products: { type: Array, required: true }
 })
 
-const destroyProduct = (id) => {
-    router.delete(route('admin.products.destroy', id), {
+const deleteProduct = (product) => {
+    router.delete(route('products.destroy', product.id), {
         preserveScroll: true,
         onSuccess: () => {
 

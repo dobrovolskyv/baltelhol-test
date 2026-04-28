@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>PRODUCTS PAGE</h1>
+        <h1 class="text-3xl text-black font-bold uppercase text-center">Главная старница</h1>
         <div v-if="token" >
             <h2>token</h2>
         </div>

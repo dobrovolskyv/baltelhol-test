@@ -44,8 +44,5 @@ class AuthController extends Controller
         return inertia('Product/Index');
     }
 
-    public function showLoginForm()
-    {
-        return inertia('Auth/Login');
-    }
+
 }
