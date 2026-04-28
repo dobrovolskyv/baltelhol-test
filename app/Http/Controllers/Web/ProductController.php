@@ -17,17 +17,13 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-//        $products = ProductResource::collection(Product::with('category')->paginate(10));
-//        return inertia('Product/Index', [
-//            'products' => $products
-//        ]);
         $query = Product::with('category');
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        $products = ProductResource::collection(Product::with('category')->paginate(10)->withQueryString());
+        $products = ProductResource::collection($query->paginate(10)->withQueryString());
 
         return inertia('Product/Index', [
                 'products' => $products,
@@ -46,7 +42,9 @@ class ProductController extends Controller
 
         $id = ProductResource::make($id->load('category'))->resolve();
         return inertia('Product/Show', [
-            'product' => $id
+            'product' => $id,
+     
         ]);
     }
 }
+

@@ -21,7 +21,7 @@
                 </div>
                 <div class="flex-shrink-0">
                     <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                        {{ product.category?.name || 'Без категории' }}
+                        {{ product.category?.data?.name || product.category?.name || 'Без категории' }}
                     </span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                             Категория
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ product.category?.name || 'Нет' }}
+                            {{product.category?.data?.name || product.category?.name || 'Нет' }}
                         </dd>
                     </div>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -74,8 +74,12 @@ defineOptions({
 })
 
 const props = defineProps({
-    product: { type: Object, required: true }
+    product: { type: Object, required: true },
 })
+
+console.log('Product:', props.product);
+console.log('Product category:', props.product.category);
+console.log('Categories list:', props.categories);
 </script>
 
 <style scoped></style>

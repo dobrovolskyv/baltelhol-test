@@ -30,8 +30,8 @@ class ProductController extends Controller
     public function create()
     {
         return inertia('Admin/Product/Create', [
-        'categories' => CategoryResource::collection(Category::all())  ,
-        'product' => new ProductResource(Product::all())
+        'categories' => Category::all(),
+        'product' => new Product()
     ]);
     }
 
@@ -59,7 +59,7 @@ class ProductController extends Controller
     {
         return inertia('Admin/Product/Edit', [
             'product' => $product,
-            'categories' => CategoryResource::collection(Category::all())
+            'categories' => Category::all()
         ]);
     }
 
@@ -76,9 +76,9 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $id)
+    public function destroy(Product $product)
     {
-        $id->delete();
+        $product->delete();
         return redirect()->back();
     }
 }
