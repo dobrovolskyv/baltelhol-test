@@ -26,9 +26,6 @@ class ProductController extends Controller
         $products = $query->with('category')->paginate(10);
 
         return ProductResource::collection($products)->response();
-//        $products = (new ProductFilter())->apply($products, $data);
-//        $products = $products->get();
-//        return ProductResource::collection(Product::with('category')->paginate(10))->response();
     }
 
     public function show(Product $id)

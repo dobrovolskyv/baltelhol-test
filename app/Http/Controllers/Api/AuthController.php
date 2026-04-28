@@ -6,17 +6,13 @@ use App\Http\Requests\Api\LoginRequest;
 //use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 
 class AuthController extends Controller
 {
-//    public function register(RegisterRequest $request)
-//    {
-//        $data = $request->validated();
-//
-//    }
 
     public function login(LoginRequest $request)
     {
@@ -25,14 +21,18 @@ class AuthController extends Controller
 
 
         if( !$user || !Hash::check($data['password'], $user->password)) {
+//        if( !Auth::attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        $user->tokens()->where('name', 'auth_token')->delete();
+//        $user = Auth::user();
 
+        $user->tokens()->where('name', 'auth_token')->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
+
+//        $request->session()->regenerate();
 
         return response()->json(['token' => $token], 201);
     }

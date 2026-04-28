@@ -69,7 +69,7 @@ class ProductController extends Controller
     {
         $data= $request->validated();
         $product->update($data);
-        return redirect()->reoute('admin.products.index');
+        return redirect()->route('admin.products.index');
     }
 
     /**
