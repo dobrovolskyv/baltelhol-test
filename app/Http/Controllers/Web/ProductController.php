@@ -21,7 +21,8 @@ class ProductController extends Controller
 //        return inertia('Product/Index', [
 //            'products' => $products
 //        ]);
-        $query = Product::query();
+        $query = Product::with('category');
+
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
@@ -31,7 +32,7 @@ class ProductController extends Controller
         return inertia('Product/Index', [
                 'products' => $products,
                 'categories' => Category::all(),
-                'filters'=> $request->only('category_id'),
+                'filters' => $request->only('category_id'),
             ]
         );
     }

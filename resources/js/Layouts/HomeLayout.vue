@@ -1,59 +1,61 @@
 <template>
-    <section class="bg-white w-full">
-        <header class="p-4 flex justify-between bg-teal-200">
-            <h1>HOME PAGE</h1>
-            <div class="flex items-center gap-3 ">
-                <Link :href="route('admin.products.index')" class="hover:hover:text-cyan-600">Админ панель</Link>
+    <div class="min-h-screen bg-gray-50 font-sans text-gray-900">
+        <!-- Навигационная панель -->
+        <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <Link :href="route('home')" class="text-2xl font-bold text-indigo-600 tracking-tight">
+                                BalTelHol
+                            </Link>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <Link :href="route('admin.products.index')" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors">
+                            Панель управления
+                        </Link>
 
-                <div v-if="token">
-                    <button @click="logout" class="hover:hover:text-cyan-600">Выход</button>
+                        <button v-if="isAuthenticated" @click="logout" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Выйти
+                        </button>
+                        <Link v-else :href="route('login')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Войти
+                        </Link>
+                    </div>
                 </div>
-
-                <!--                <div v-else>-->
-                <!--                    <Link :href="route('login')" class="hover:hover:text-cyan-600">Вход</Link>-->
-                <!--                </div>-->
-
             </div>
-        </header>
-    </section>
-    <section class="w-full">
-        <div class="flex items-start justify-center">
-            <div class="w-3/4 bg-gray-50 p-4 h-full">
-                <article>
-                    <slot/>
-                </article>
-            </div>
-        </div>
-    </section>
+        </nav>
+
+        <!-- Основной контент -->
+        <main class="w-full">
+            <slot/>
+        </main>
+
+
+    </div>
 </template>
 
 <script setup>
-import {Link, router} from "@inertiajs/vue3";
-import {useAuth} from "@/feature/useAuth.js";
-import {onMounted} from "vue";
+import { Link, router } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 
-
-const {token,clearToken, checkAndRedirect} = useAuth();
+const isAuthenticated = ref(false);
 
 onMounted(() => {
-    checkAndRedirect()
-})
+    isAuthenticated.value = !!localStorage.getItem('admin_token');
+});
 
-
-const logout = async () => {
-    try {
-        await axios.post('/logout');
-        localStorage.removeItem('admin_token');
-        delete axios.defaults.headers.common['Authorization']
-        router.visit(route('home'));
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-
+const logout = () => {
+    router.post(route('logout'), {}, {
+        onSuccess: () => {
+            localStorage.removeItem('admin_token');
+            delete axios.defaults.headers.common['Authorization'];
+            isAuthenticated.value = false;
+        }
+    });
+};
 </script>
-
 
 <style scoped></style>

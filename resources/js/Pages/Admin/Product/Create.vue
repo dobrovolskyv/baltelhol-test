@@ -1,40 +1,89 @@
 <template>
-    <div>
-        <h1>CREATE PRODUCT</h1>
-        <SuccessPopup 
-            :show="showSuccess" 
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900">Добавить товар</h1>
+        </div>
+
+        <SuccessPopup
+            :show="showSuccess"
             message="Продукт успешно создан!"
             @close="showSuccess = false"
         />
-        <div class="flex flex-col items-start gap-5">
-            <input v-model="form.name" class="border border-gray-400 rounded max-w-80 w-full" type="text" required
-                placeholder="name">
-            <textarea v-model="form.description" class="border border-gray-400 rounded max-w-80 w-full resize-none"
-                placeholder="description"></textarea>
-            <select v-model="form.category_id" class="border border-gray-400 rounded max-w-80 w-full" required>
-                <option value="" disabled>Выберите категорию</option>
-                <option v-for="category in categories" :key="category.id" :value="category.id">
-                    {{ category.name }}
-                </option>
-            </select>
-            <input v-model.number="form.price" class="border border-gray-400 rounded max-w-80 w-full" type="number"
-                placeholder="price">
+
+        <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+            <div class="md:grid md:grid-cols-3 md:gap-6">
+                <div class="md:col-span-1">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Информация о товаре</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Заполните все необходимые поля для создания нового товара.
+                    </p>
+                </div>
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <form @submit.prevent="storeProduct">
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="name" class="block text-sm font-medium text-gray-700">Название</label>
+                                <input type="text" id="name" v-model="form.name" required
+                                       class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2 px-3 border"
+                                       :class="{'border-red-300': errors.name}"
+                                       placeholder="Название товара">
+                                <p v-if="errors.name" class="mt-2 text-sm text-red-600">{{ errors.name }}</p>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="category_id" class="block text-sm font-medium text-gray-700">Категория</label>
+                                <select id="category_id" v-model="form.category_id" required
+                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        :class="{'border-red-300': errors.category_id}">
+                                    <option value="" disabled>Выберите категорию</option>
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                                <p v-if="errors.category_id" class="mt-2 text-sm text-red-600">{{ errors.category_id }}</p>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="price" class="block text-sm font-medium text-gray-700">Цена (₽)</label>
+                                <div class="mt-1 flex rounded-md shadow-sm">
+                                    <input type="number" id="price" v-model.number="form.price" step="0.01" min="0.01" required
+                                           class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-3 border"
+                                           :class="{'border-red-300': errors.price}"
+                                           placeholder="0.00">
+                                </div>
+                                <p v-if="errors.price" class="mt-2 text-sm text-red-600">{{ errors.price }}</p>
+                            </div>
+
+                            <div class="col-span-6">
+                                <label for="description" class="block text-sm font-medium text-gray-700">Описание</label>
+                                <div class="mt-1">
+                                    <textarea id="description" v-model="form.description" rows="3"
+                                              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md py-2 px-3"
+                                              :class="{'border-red-300': errors.description}"
+                                              placeholder="Краткое описание товара..."></textarea>
+                                </div>
+                                <p v-if="errors.description" class="mt-2 text-sm text-red-600">{{ errors.description }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end mt-6 gap-4 border-t border-gray-200 pt-5">
+                            <Link :href="route('admin.products.index')" class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                                Отмена
+                            </Link>
+                            <button type="submit"
+                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                Создать товар
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <button @click="storeProduct"
-            class="inline-block px-3 py-2 bg-blue-700 border border-blue-500 text-white text-xs rounded mt-5">
-            Создать
-        </button>
-
-        <Link class="block text-blue-400 hover:text-blue-900 mt-5" :href="route('admin.product.index')">
-            Назад в админку
-        </Link>
     </div>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import axios from 'axios';
 import { reactive, ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3'
 import SuccessPopup from '@/Components/SuccessPopup.vue'
@@ -44,14 +93,13 @@ defineOptions({
 })
 
 const props = defineProps({
-    product: { type: Object, required: true },
-    categories: { type: Object, required: true }
+    categories: { type: Array, required: true }
 })
 
 const form = reactive({
     name: '',
     description: '',
-    price: '',
+    price: null,
     category_id: ''
 })
 
@@ -59,16 +107,15 @@ const errors = ref({})
 const showSuccess = ref(false)
 
 const storeProduct = () => {
-    router.post(route('admin.product.store'), form, {
+    router.post(route('admin.products.store'), form, {
         onSuccess: () => {
             form.name = ''
             form.description = ''
             form.price = null
             form.category_id= ''
             errors.value = {}
-            
+
             showSuccess.value = true
-            
 
             setTimeout(() => {
                 showSuccess.value = false
@@ -76,10 +123,9 @@ const storeProduct = () => {
         },
         onError: (err) => {
             errors.value = err
-            console.log('Ошибки валидации:', err)
         }
     })
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
